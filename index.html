@@ -1,0 +1,1698 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfólio designer e edição de vídeo por José Marcos.">
+  <title>José Marcos Designer — Portfólio</title>
+  <style>
+ 
+    /* ============================================
+       1. RESET & BASE
+    ============================================ */
+    :root {
+      --ink: #05070a;          /* fundo geral do site (quase preto) */
+      --black: #000000;        /* preto puro (usado no efeito líquido) */
+      --deep-blue: #0845b4;    /* azul escuro (cor de destaque principal) */
+      --navy: #0c1624;         /* fundo dos cards */
+      --white: #f7f9fc;
+      --ice: #dceaff;
+      --muted: #93a4bc;
+      --line: rgba(220, 234, 255, .14);
+      --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    }
+ 
+    * { box-sizing: border-box; }
+ 
+    html {
+      scroll-behavior: smooth;
+      background: var(--ink);
+      overflow-x: hidden;
+      width: 100%;
+    }
+ 
+    body {
+      margin: 0;
+      min-height: 100vh;
+      width: 100%;
+      background: var(--ink);
+      color: var(--white);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      overflow-x: hidden;
+      position: relative;
+    }
+ 
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+    img, video { max-width: 100%; }
+ 
+    .shell {
+      max-width: 1240px;
+      margin: auto;
+      padding: 0 32px;
+    }
+ 
+ 
+    /* ============================================
+       2. HEADER
+    ============================================ */
+    .topbar {
+      position: relative;
+      z-index: 30;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 11, 16, .72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+ 
+    .topbar::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: -1px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--deep-blue), #3d7fe0, var(--deep-blue), transparent);
+      opacity: .45;
+    }
+ 
+    main, footer { position: relative; z-index: 1; }
+ 
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      flex-shrink: 0;
+    }
+ 
+    .brand .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      background: var(--deep-blue);
+      color: #fff;
+      border-radius: 4px;
+      font-size: 14px;
+      box-shadow: 0 0 18px rgba(8, 69, 180, .45);
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    }
+ 
+    .brand span { font-size: 18px; }
+ 
+    .nav {
+      display: flex;
+      gap: 30px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+ 
+    .nav a { position: relative; }
+ 
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -4px;
+      width: 0; height: 1px;
+      background: linear-gradient(90deg, var(--deep-blue), #3d7fe0);
+      transition: width .25s ease;
+    }
+ 
+    .nav a:hover { color: var(--white); }
+    .nav a:hover::after { width: 100%; }
+ 
+    /* Menu mobile — escondido por padrão; só aparece via JS (.show) em telas pequenas */
+    .mobile-nav { display: none; }
+ 
+    .top-cta {
+      border: 1px solid var(--line);
+      padding: 11px 17px;
+      border-radius: 4px;
+      font-size: 13px;
+      transition: .2s;
+      white-space: nowrap;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+ 
+    .top-cta:hover {
+      background: var(--deep-blue);
+      border-color: var(--deep-blue);
+      box-shadow: 0 0 22px rgba(8, 69, 180, .4);
+    }
+ 
+    /* Botão hamburger — visível apenas em telas pequenas */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 0;
+      flex-shrink: 0;
+    }
+ 
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 1px;
+      margin: 0 auto;
+      background: var(--ice);
+      transition: transform .25s ease, opacity .25s ease;
+    }
+ 
+    .menu-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .menu-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+ 
+ 
+    /* ============================================
+       3. HERO + EFEITO LÍQUIDO (apenas preto + azul escuro)
+    ============================================ */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+ 
+    .hero-liquid {
+      position: absolute;
+      inset: 0;
+      background: var(--black);
+      overflow: hidden;
+      z-index: 0;
+    }
+ 
+    /* leve grão para dar textura ao movimento */
+    .hero-liquid::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      opacity: .5;
+      z-index: 2;
+      pointer-events: none;
+    }
+ 
+    .liquid-blob {
+      position: absolute;
+      filter: blur(55px);
+      will-change: transform, border-radius;
+    }
+ 
+    /* manchas azuis (mesma cor #0845b4, variando opacidade/tamanho para dar profundidade) */
+    .liquid-blob-blue {
+      mix-blend-mode: screen;
+      background: radial-gradient(circle at 40% 40%, var(--deep-blue) 0%, #052f7d 45%, transparent 76%);
+    }
+ 
+    /* manchas pretas (para o contraste "tinta" no fundo) */
+    .liquid-blob-black {
+      mix-blend-mode: multiply;
+      background: radial-gradient(circle at 50% 50%, #000 0%, #010204 45%, transparent 74%);
+    }
+ 
+    .liquid-blob-1 {
+      width: min(680px, 90vw); height: min(680px, 74vh);
+      top: -20%; left: -14%;
+      opacity: .95;
+      border-radius: 42% 58% 68% 32% / 48% 42% 58% 52%;
+      animation: liquid-1 5.5s ease-in-out infinite;
+    }
+ 
+    .liquid-blob-2 {
+      width: min(560px, 78vw); height: min(560px, 66vh);
+      top: 8%; right: -16%;
+      opacity: .85;
+      border-radius: 58% 42% 35% 65% / 52% 58% 42% 48%;
+      animation: liquid-2 6.5s ease-in-out infinite;
+    }
+ 
+    .liquid-blob-3 {
+      width: min(500px, 72vw); height: min(500px, 62vh);
+      bottom: -22%; left: 16%;
+      opacity: .9;
+      border-radius: 65% 35% 52% 48% / 38% 62% 38% 62%;
+      animation: liquid-3 5s ease-in-out infinite;
+    }
+ 
+    .liquid-blob-4 {
+      width: min(460px, 66vw); height: min(460px, 58vh);
+      bottom: 2%; right: 18%;
+      opacity: 1;
+      filter: blur(48px);
+      border-radius: 48% 52% 64% 36% / 44% 56% 44% 56%;
+      animation: liquid-4 8s ease-in-out infinite;
+    }
+ 
+    .liquid-blob-5 {
+      width: min(560px, 86vw); height: min(560px, 76vh);
+      top: 20%; left: 26%;
+      opacity: 1;
+      filter: blur(48px);
+      border-radius: 52% 48% 60% 40% / 45% 55% 45% 55%;
+      animation: liquid-5 7.5s ease-in-out infinite;
+    }
+ 
+    .liquid-blob-6 {
+      width: min(420px, 62vw); height: min(420px, 56vh);
+      bottom: -10%; right: 0;
+      opacity: .9;
+      filter: blur(50px);
+      border-radius: 60% 40% 45% 55% / 50% 50% 55% 45%;
+      animation: liquid-6 8s ease-in-out infinite reverse;
+    }
+ 
+    .hero-liquid-fade {
+      position: absolute;
+      inset: auto 0 0;
+      height: 140px;
+      background: linear-gradient(180deg, transparent, var(--ink));
+      z-index: 1;
+      pointer-events: none;
+    }
+ 
+    @keyframes liquid-1 {
+      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 42% 58% 68% 32% / 48% 42% 58% 52%; }
+      25%      { transform: translate(20vw,14vh) rotate(90deg) scale(1.22); border-radius: 58% 42% 38% 62% / 55% 45% 55% 45%; }
+      50%      { transform: translate(10vw,-8vh) rotate(180deg) scale(.88); border-radius: 35% 65% 55% 45% / 62% 38% 62% 38%; }
+      75%      { transform: translate(-8vw,10vh) rotate(270deg) scale(1.16); border-radius: 50% 50% 40% 60% / 48% 52% 48% 52%; }
+    }
+    @keyframes liquid-2 {
+      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 58% 42% 35% 65% / 52% 58% 42% 48%; }
+      33%      { transform: translate(-18vw,20vh) rotate(-120deg) scale(1.28); border-radius: 40% 60% 65% 35% / 58% 42% 58% 42%; }
+      66%      { transform: translate(-9vw,-14vh) rotate(-240deg) scale(.86); border-radius: 62% 38% 48% 52% / 45% 55% 45% 55%; }
+    }
+    @keyframes liquid-3 {
+      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 65% 35% 52% 48% / 38% 62% 38% 62%; }
+      30%      { transform: translate(24vw,-18vh) rotate(100deg) scale(1.2); border-radius: 45% 55% 68% 32% / 52% 48% 52% 48%; }
+      60%      { transform: translate(-14vw,-9vh) rotate(200deg) scale(1.3); border-radius: 55% 45% 35% 65% / 48% 52% 48% 52%; }
+    }
+    @keyframes liquid-4 {
+      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 48% 52% 64% 36% / 44% 56% 44% 56%; }
+      40%      { transform: translate(-20vw,11vh) rotate(-80deg) scale(1.24); border-radius: 62% 38% 42% 58% / 55% 45% 55% 45%; }
+      80%      { transform: translate(14vw,18vh) rotate(-160deg) scale(.82); border-radius: 38% 62% 58% 42% / 48% 52% 48% 52%; }
+    }
+    @keyframes liquid-5 {
+      0%, 100% { transform: translate(0,0) scale(1); border-radius: 52% 48% 60% 40% / 45% 55% 45% 55%; }
+      50%      { transform: translate(-14vw,14vh) scale(1.32); border-radius: 40% 60% 55% 45% / 58% 42% 58% 42%; }
+    }
+    @keyframes liquid-6 {
+      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 60% 40% 45% 55% / 50% 50% 55% 45%; }
+      50%      { transform: translate(18vw,-18vh) rotate(140deg) scale(1.26); border-radius: 42% 58% 62% 38% / 55% 45% 50% 50%; }
+    }
+ 
+    /* conteúdo da hero — mais colado no header */
+    .hero-grid {
+      position: relative;
+      z-index: 2;
+      min-height: 620px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 80px;
+      padding: 40px 0 72px;
+    }
+ 
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 22px; height: 22px;
+      bottom: 48px; right: 32px;
+      border: 0 1px 1px 0;
+      border-color: rgba(161, 189, 228, 0.28);
+      border-style: solid;
+      pointer-events: none;
+      opacity: .7;
+      z-index: 3;
+    }
+ 
+    .hero-copy { position: relative; }
+ 
+    .hero-copy::before {
+      content: "SYS // PORTFOLIO_v2.6";
+      position: absolute;
+      top: -24px; left: 0;
+      font: 600 10px/1 var(--mono);
+      letter-spacing: .18em;
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+    }
+ 
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+ 
+    .eyebrow i {
+      width: 34px; height: 1px;
+      background: linear-gradient(90deg, var(--deep-blue), #7c848f);
+    }
+ 
+    h1 {
+      font-size: clamp(46px, 8vw, 112px);
+      line-height: .91;
+      letter-spacing: -.085em;
+      margin: 25px 0 30px;
+      max-width: 760px;
+    }
+ 
+    h1 em {
+      font-style: normal;
+      color: #0768fa;
+      text-shadow: 0 0 40px rgba(8, 69, 180, .3);
+    }
+ 
+    .lede {
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+ 
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+      align-items: center;
+    }
+ 
+    .primary,
+    .secondary {
+      padding: 14px 21px;
+      border-radius: 4px;
+      font-weight: 700;
+      display: inline-block;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    }
+ 
+    .primary {
+      background: var(--deep-blue);
+      border: 1px solid var(--deep-blue);
+      color: #fff;
+      transition: .2s;
+    }
+ 
+    .primary:hover {
+      background: #1257c9;
+      box-shadow: 0 0 28px rgba(8, 69, 180, .45);
+    }
+ 
+    .secondary {
+      border: 1px solid var(--line);
+      color: var(--ice);
+      font-weight: 700;
+    }
+ 
+    .secondary:hover {
+      border-color: #3d7fe0;
+      box-shadow: 0 0 16px rgba(8, 69, 180, .18);
+    }
+ 
+    /* imagem de destaque da hero */
+    .hero-art {
+      position: relative;
+      height: 455px;
+      background: var(--navy);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 28px 100%, 0 calc(100% - 28px));
+    }
+ 
+    .hero-art::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(145deg, rgba(8, 69, 180, .22), transparent 45%),
+        url('images/hero.JPEG') center/cover;
+      mix-blend-mode: screen;
+      opacity: .78;
+    }
+ 
+    .hero-art::after {
+      content: "A / M";
+      position: absolute;
+      bottom: 25px; left: 27px;
+      color: #fff;
+      font: 800 13px/1 var(--mono);
+      letter-spacing: .2em;
+    }
+ 
+    .art-label {
+      position: absolute;
+      right: 24px; top: 24px;
+      color: var(--ice);
+      font: 600 11px/1 var(--mono);
+      letter-spacing: .12em;
+      writing-mode: vertical-rl;
+      opacity: .75;
+    }
+ 
+    .circle {
+      position: absolute;
+      right: 30px; bottom: 30px;
+      width: 112px; height: 112px;
+      border: 1px solid rgba(61, 127, 224, .4);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--ice);
+      font: 600 11px/1.35 var(--mono);
+      text-align: center;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      box-shadow: 0 0 24px rgba(8, 69, 180, .1);
+    }
+ 
+    .hero-hud {
+      position: absolute;
+      left: 18px; top: 18px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font: 600 9px/1 var(--mono);
+      letter-spacing: .14em;
+      color: rgba(90, 150, 230, .5);
+      text-transform: uppercase;
+    }
+ 
+    .hero-hud i {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #3d7fe0;
+      box-shadow: 0 0 8px #3d7fe0;
+      animation: hud-pulse 2.4s ease-in-out infinite;
+    }
+ 
+    @keyframes hud-pulse {
+      0%, 100% { opacity: .4; }
+      50%      { opacity: 1; }
+    }
+ 
+ 
+    /* ============================================
+       4. SWITCHER (filtro Designer / Editor de Vídeos)
+    ============================================ */
+    .switcher {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 22px;
+      padding: 56px 24px 64px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: radial-gradient(ellipse 80% 120% at 50% 0%, rgba(8, 69, 180, .16), transparent 70%);
+    }
+ 
+    .switcher::before,
+    .switcher::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 48px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(61, 127, 224, .3));
+      transform: translateY(-50%);
+    }
+ 
+    .switcher::before { left: 8%; }
+    .switcher::after { right: 8%; transform: translateY(-50%) scaleX(-1); }
+ 
+    .switcher-title {
+      font: 800 12px/1 var(--mono);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #3d7fe0;
+    }
+ 
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+    }
+ 
+    .tab {
+      font-weight: 700;
+      letter-spacing: -.01em;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease, color .22s ease;
+    }
+ 
+    /* Designer / Editor de Vídeos — botões em destaque */
+    .tab-major {
+      background: rgba(8, 69, 180, .12);
+      color: var(--ice);
+      border: 2px solid rgba(8, 69, 180, .5);
+      border-radius: 4px;
+      padding: 18px 44px;
+      font-size: 16px;
+      box-shadow: 0 6px 28px rgba(8, 69, 180, .16);
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    }
+ 
+    .tab-major:hover {
+      color: var(--white);
+      border-color: var(--deep-blue);
+      background: rgba(8, 69, 180, .26);
+      box-shadow: 0 10px 36px rgba(8, 69, 180, .32);
+      transform: translateY(-2px);
+    }
+ 
+    .tab-major.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--deep-blue), #1257c9);
+      border-color: var(--deep-blue);
+      box-shadow: 0 16px 48px rgba(8, 69, 180, .5);
+      transform: translateY(-2px);
+    }
+ 
+    /* "Ver todos" — discreto, sem destaque */
+    .tab-minor {
+      background: none;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+ 
+    .tab-minor:hover { color: var(--ice); border-color: var(--line); }
+    .tab-minor.active { color: #3d7fe0; border-color: rgba(8, 69, 180, .35); }
+ 
+ 
+    /* ============================================
+       5. SECTIONS — cabeçalhos genéricos
+    ============================================ */
+    section { padding: 100px 0; position: relative; }
+ 
+    .section-tag {
+      font: 600 10px/1 var(--mono);
+      letter-spacing: .2em;
+      color: rgba(90, 150, 230, .4);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: block;
+    }
+ 
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 34px;
+    }
+ 
+    .section-head h2 {
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1;
+      letter-spacing: -.07em;
+      margin: 0;
+    }
+ 
+    .section-head p {
+      max-width: 330px;
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0;
+    }
+ 
+    .subsection-title {
+      font: 700 13px/1 var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+ 
+    .subsection-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+ 
+ 
+    /* ============================================
+       6. CARDS DE PROJETO (base compartilhada)
+    ============================================ */
+    .project {
+      background: var(--navy);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      transition: border-color .3s, box-shadow .3s;
+      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    }
+ 
+    .project::before {
+      content: "";
+      position: absolute;
+      top: 12px; left: 12px;
+      width: 14px; height: 14px;
+      border: 1px solid transparent;
+      border-right: none;
+      border-bottom: none;
+      z-index: 3;
+      opacity: 0;
+      transition: .3s;
+      pointer-events: none;
+    }
+ 
+    .project::after {
+      content: "";
+      position: absolute;
+      inset: 40% 0 0;
+      background: linear-gradient(transparent, rgba(8, 11, 16, .95));
+      z-index: 1;
+      pointer-events: none;
+    }
+ 
+    .project:hover::before { opacity: 1; border-color: rgba(61, 127, 224, .5); }
+    .project:hover { border-color: rgba(8, 69, 180, .5); box-shadow: 0 0 32px rgba(8, 69, 180, .15); }
+ 
+    .project img,
+    .project video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: .72;
+      transition: .45s;
+    }
+ 
+    .project:hover img { transform: scale(1.04); opacity: .92; }
+ 
+    .project-info {
+      position: absolute;
+      z-index: 2;
+      left: 25px; right: 25px; bottom: 24px;
+    }
+ 
+    .project-info small {
+      color: var(--ice);
+      font: 600 11px/1 var(--mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+ 
+    .project-info h3 {
+      font-size: 28px;
+      letter-spacing: -.06em;
+      margin: 8px 0 0;
+    }
+ 
+    /* placeholder — espaço reservado para arte/vídeo futuro */
+    .project.placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(8, 69, 180, .05);
+      border: 2px dashed rgba(8, 69, 180, .35);
+      text-align: center;
+      padding: 24px;
+    }
+ 
+    .project.placeholder::before,
+    .project.placeholder::after { display: none; }
+ 
+    .placeholder-icon {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      border: 1px solid rgba(61, 127, 224, .45);
+      display: grid;
+      place-items: center;
+      color: #3d7fe0;
+      font: 600 22px/1 var(--mono);
+    }
+ 
+    .placeholder-text {
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 220px;
+    }
+ 
+    .placeholder-text b {
+      display: block;
+      color: var(--ice);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+ 
+    /* Miniatura de vídeo do YouTube com botão de play */
+    .yt-thumb {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: .72;
+      transition: .45s;
+    }
+ 
+    .project:hover .yt-thumb { transform: scale(1.04); opacity: .92; }
+ 
+    .yt-play {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(8, 11, 16, .55);
+      border: 1px solid rgba(220, 234, 255, .35);
+      display: grid;
+      place-items: center;
+      z-index: 2;
+      transition: .25s;
+      pointer-events: none;
+    }
+ 
+    .yt-play::after {
+      content: "";
+      border-style: solid;
+      border-width: 10px 0 10px 16px;
+      border-color: transparent transparent transparent #fff;
+      margin-left: 4px;
+    }
+ 
+    .project:hover .yt-play {
+      background: var(--deep-blue);
+      border-color: var(--deep-blue);
+      box-shadow: 0 0 24px rgba(8, 69, 180, .5);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+ 
+ 
+    /* ============================================
+       7. GRID DE DESIGN
+    ============================================ */
+    .design-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 28px;
+    }
+ 
+    .design-grid .project { min-height: 440px; }
+    .design-grid .project.large { min-height: 680px; }
+    .design-grid .stack { display: grid; gap: 28px; }
+    .design-grid .stack .project { min-height: 340px; }
+ 
+    .design-extra { display: none; margin-top: 28px; }
+    .design-extra.show { display: grid; }
+ 
+ 
+    /* ============================================
+       8. GALERIA DE VÍDEOS (5 espaços)
+    ============================================ */
+    .video-section { margin-top: 64px; }
+ 
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+ 
+    .video-grid .project {
+      aspect-ratio: 9 / 16;
+      max-width: 320px;
+      margin: 0 auto;
+      width: 100%;
+    }
+ 
+ 
+    /* alterna entre o grupo Design e o grupo Vídeos (não empilha os dois) */
+    .portfolio-group { display: none; }
+    .portfolio-group.active { display: block; }
+ 
+ 
+    /* ============================================
+       8.1 LIGHTBOX — amplia a arte/vídeo ao clicar
+    ============================================ */
+    .project.expandable { cursor: zoom-in; }
+ 
+    .expand-hint {
+      position: absolute;
+      z-index: 3;
+      top: 14px; right: 14px;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(5, 7, 10, .55);
+      border: 1px solid rgba(220, 234, 255, .25);
+      display: grid;
+      place-items: center;
+      color: var(--ice);
+      opacity: 0;
+      transform: scale(.85);
+      transition: opacity .2s, transform .2s;
+      pointer-events: none;
+    }
+ 
+    .project.expandable:hover .expand-hint { opacity: 1; transform: scale(1); }
+ 
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: rgba(2, 3, 6, .88);
+      backdrop-filter: blur(6px);
+    }
+ 
+    .lightbox.show { display: flex; }
+ 
+    .lightbox-inner {
+      position: relative;
+      max-width: min(90vw, 900px);
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+ 
+    .lightbox-media {
+      max-width: 100%;
+      max-height: 76vh;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, .6);
+    }
+ 
+    .lightbox-media img,
+    .lightbox-media video {
+      display: block;
+      max-width: 100%;
+      max-height: 76vh;
+      width: auto;
+      height: auto;
+    }
+ 
+    .lightbox-media iframe {
+      display: block;
+      width: min(84vw, 800px);
+      aspect-ratio: 16 / 9;
+      height: auto;
+      max-height: 76vh;
+      border: 0;
+    }
+ 
+    .lightbox-caption {
+      color: var(--ice);
+      text-align: center;
+      font-size: 14px;
+    }
+ 
+    .lightbox-caption small {
+      display: block;
+      color: var(--muted);
+      font: 600 11px/1 var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+ 
+    .lightbox-close {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(5, 7, 10, .7);
+      border: 1px solid var(--line);
+      color: var(--white);
+      font-size: 16px;
+      display: grid;
+      place-items: center;
+      transition: .2s;
+    }
+ 
+    .lightbox-close:hover {
+      border-color: #3d7fe0;
+      color: #3d7fe0;
+    }
+ 
+ 
+    /* ============================================
+       9. BOTÃO "VER MAIS"
+    ============================================ */
+    .load-more {
+      display: flex;
+      justify-content: center;
+      margin-top: 36px;
+    }
+ 
+    .load-more button {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--ice);
+      padding: 14px 34px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: .02em;
+      transition: .2s;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    }
+ 
+    .load-more button:hover {
+      border-color: #3d7fe0;
+      color: #fff;
+      box-shadow: 0 0 18px rgba(8, 69, 180, .18);
+    }
+ 
+ 
+    /* ============================================
+       10. NÚMEROS (facts)
+    ============================================ */
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+ 
+    .fact {
+      position: relative;
+      padding: 28px 24px;
+      border-right: 1px solid var(--line);
+    }
+ 
+    .fact:last-child { border-right: 0; }
+ 
+    .fact::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 24px; right: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(61, 127, 224, .25), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+ 
+    .fact:hover::before { opacity: 1; }
+ 
+    .fact strong {
+      display: block;
+      color: #3d7fe0;
+      font: 700 42px/1 var(--mono);
+      letter-spacing: -.04em;
+      text-shadow: 0 0 24px rgba(8, 69, 180, .25);
+    }
+ 
+    .fact span { color: var(--muted); font-size: 13px; }
+ 
+ 
+    /* ============================================
+       11. PROCESSO
+    ============================================ */
+    .process {
+      display: grid;
+      grid-template-columns: .75fr 1.25fr;
+      gap: 90px;
+    }
+ 
+    .process h2 {
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: 1;
+      letter-spacing: -.07em;
+      margin: 0;
+    }
+ 
+    .process p { color: var(--muted); font-size: 15px; }
+ 
+    .steps { position: relative; display: grid; gap: 0; }
+ 
+    .steps::before {
+      content: "";
+      position: absolute;
+      left: 27px; top: 12px; bottom: 12px;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(8, 69, 180, .55), rgba(61, 127, 224, .15), rgba(8, 69, 180, .55));
+      opacity: .35;
+    }
+ 
+    .step {
+      display: grid;
+      grid-template-columns: 55px 1fr;
+      gap: 20px;
+      padding: 24px 0;
+      border-top: 1px solid var(--line);
+    }
+ 
+    .step:first-child { padding-top: 0; border-top: 0; }
+    .step b { color: #3d7fe0; font: 700 13px/1 var(--mono); }
+    .step h3 { margin: 0 0 5px; font-size: 20px; letter-spacing: -.04em; }
+    .step p { margin: 0; font-size: 14px; }
+ 
+ 
+    /* ============================================
+       12. CONTATO
+    ============================================ */
+    .contact {
+      position: relative;
+      background: var(--deep-blue);
+      color: #fff;
+      border-radius: 4px;
+      padding: 55px 54px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      overflow: hidden;
+      clip-path: polygon(0 0, calc(100% - 32px) 0, 100% 32px, 100% 100%, 32px 100%, 0 calc(100% - 32px));
+    }
+ 
+    .contact::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(255, 255, 255, .025) 18px, rgba(255, 255, 255, .025) 19px);
+      pointer-events: none;
+    }
+ 
+    .contact::after {
+      content: "TX // OPEN";
+      position: absolute;
+      top: 18px; right: 28px;
+      font: 600 9px/1 var(--mono);
+      letter-spacing: .16em;
+      color: rgba(255, 255, 255, .35);
+    }
+ 
+    .contact h2 {
+      font-size: clamp(35px, 5vw, 66px);
+      line-height: .95;
+      letter-spacing: -.07em;
+      margin: 0;
+      max-width: 620px;
+    }
+ 
+    .contact p { max-width: 330px; color: var(--ice); font-size: 14px; }
+    .contact .secondary { border-color: rgba(255, 255, 255, .45); white-space: nowrap; }
+    .contact .secondary:hover { background: #fff; color: var(--deep-blue); }
+ 
+ 
+    /* ============================================
+       13. FOOTER & TOAST
+    ============================================ */
+    footer {
+      padding: 32px 0;
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+ 
+    footer span:last-child {
+      font-family: var(--mono);
+      letter-spacing: .06em;
+      opacity: .7;
+    }
+ 
+    .toast {
+      position: fixed;
+      bottom: 25px; right: 25px;
+      left: 25px;
+      max-width: 320px;
+      margin-left: auto;
+      background: var(--white);
+      color: var(--ink);
+      padding: 14px 18px;
+      border-radius: 4px;
+      font-size: 13px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: .25s;
+      pointer-events: none;
+      border-left: 3px solid var(--deep-blue);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .4);
+    }
+ 
+    .toast.show { opacity: 1; transform: translateY(0); }
+ 
+ 
+    /* ============================================
+       14. ACESSIBILIDADE & RESPONSIVO
+    ============================================ */
+    @media (prefers-reduced-motion: reduce) {
+      .liquid-blob { animation-duration: 38s !important; }
+      .hero-hud i { animation-duration: 6s !important; }
+    }
+ 
+    /* --- TABLET (≈1080px e abaixo): ainda 2 colunas, mas mais compactas --- */
+    @media (max-width: 1080px) {
+      .shell { padding: 0 24px; }
+      .hero-grid { gap: 48px; }
+      .hero-art { height: 400px; }
+      .design-grid { gap: 20px; }
+      .process { gap: 48px; }
+    }
+ 
+    /* --- TABLET PEQUENO / MOBILE GRANDE (≈900px): quebra para 1 coluna --- */
+    @media (max-width: 900px) {
+      .nav { display: none; }
+      .menu-toggle { display: flex; }
+      .top-cta { display: none; } /* some do topbar no mobile — vira o último item do menu */
+ 
+      .mobile-nav {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        z-index: 29;
+        flex-direction: column;
+        gap: 2px;
+        max-height: calc(100vh - 72px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 10px 20px calc(20px + env(safe-area-inset-bottom));
+        background: var(--ink);
+        border-bottom: 1px solid var(--line);
+      }
+ 
+      .mobile-nav.show { display: flex; }
+ 
+      .mobile-nav a {
+        padding: 15px 4px;
+        color: var(--ice);
+        font-size: 15px;
+        font-weight: 600;
+        border-bottom: 1px solid var(--line);
+      }
+ 
+      .mobile-nav a:last-of-type { border-bottom: 0; }
+ 
+      .mobile-nav-cta {
+        margin-top: 8px;
+        padding: 13px 16px !important;
+        text-align: center;
+        background: var(--deep-blue);
+        color: #fff !important;
+        border-radius: 4px;
+        border-bottom: 0 !important;
+      }
+ 
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; padding: 32px 0 56px; min-height: auto; }
+      .hero::after { display: none; }
+      .hero-copy::before { display: none; }
+      .hero-art { height: 380px; }
+ 
+      .design-grid { grid-template-columns: 1fr; }
+      .design-grid .project.large { min-height: 420px; }
+      .design-grid .stack .project { min-height: 300px; }
+ 
+      .process { grid-template-columns: 1fr; }
+ 
+      .facts { grid-template-columns: 1fr 1fr; }
+      .fact:nth-child(2) { border-right: 0; }
+      .fact:nth-child(3) { grid-column: span 2; border-right: 0; border-top: 1px solid var(--line); }
+    }
+ 
+    @media (max-width: 800px) {
+      .shell { padding: 0 20px; }
+      .topbar { height: 72px; }
+      .switcher { padding: 44px 16px 52px; gap: 18px; }
+      .tabs { width: 100%; gap: 10px; }
+      .tab-major { flex: 1 1 calc(50% - 5px); min-width: 140px; padding: 15px 20px; font-size: 14px; }
+      .video-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+      .section-head { display: block; }
+      .section-head p { margin-top: 17px; }
+      .facts { grid-template-columns: 1fr; }
+      .fact { border-right: 0; border-bottom: 1px solid var(--line); }
+      .fact:nth-child(2) { border-right: 0; }
+      .fact:nth-child(3) { grid-column: span 1; border-top: 0; }
+      .fact:last-child { border-bottom: 0; }
+      .contact { padding: 34px 26px; display: block; }
+      .contact p { margin: 25px 0; }
+      .contact .secondary { display: inline-block; }
+      footer { display: block; }
+      footer span { display: block; margin-top: 7px; }
+    }
+ 
+    /* --- CELULARES PEQUENOS (≈480px e abaixo) --- */
+    @media (max-width: 480px) {
+      .shell { padding: 0 22px; }
+      .topbar { height: 64px; }
+      .brand span { font-size: 16px; }
+ 
+      section { padding: 56px 0; }
+ 
+      .lightbox { padding: 16px; }
+      .lightbox-close { top: 8px; right: 8px; width: 32px; height: 32px; font-size: 14px; }
+      .lightbox-caption { font-size: 13px; }
+ 
+      h1 { font-size: clamp(38px, 13vw, 60px); margin: 18px 0 22px; }
+      .lede { font-size: 15px; }
+      .hero-art { height: 260px; }
+      .hero-actions { gap: 10px; }
+      .primary, .secondary { padding: 12px 16px; font-size: 13px; width: 100%; text-align: center; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .circle { width: 88px; height: 88px; font-size: 10px; right: 18px; bottom: 18px; }
+ 
+      .tab-major { flex: 1 1 100%; padding: 14px 16px; }
+      .tab-minor { width: 100%; }
+ 
+      .switcher { padding: 32px 0 40px; gap: 14px; }
+      .design-grid { gap: 14px; }
+      .design-grid .project.large { min-height: 320px; }
+      .design-grid .stack .project { min-height: 240px; }
+      .video-section { margin-top: 40px; }
+      .video-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+ 
+      .fact { padding: 20px 16px; }
+      .fact strong { font-size: 34px; }
+ 
+      .contact h2 { font-size: clamp(28px, 9vw, 40px); }
+      .toast { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+    }
+ 
+  </style>
+</head>
+<body>
+ 
+  <!-- ===================== HEADER ===================== -->
+  <header class="shell topbar">
+    <a class="brand" href="#top" aria-label="José Marcos, início">
+      <span class="mark">JM</span>
+      <span>José Marcos Designer<span style="color:var(--deep-blue)">.</span></span>
+    </a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="#portfolio" data-filter-link="design">Designer</a>
+      <a href="#portfolio" data-filter-link="video">Editor de Vídeos</a>
+      <a href="#processo">Processo</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="top-cta" href="https://wa.me/7799125615" target="_blank">Vamos conversar ↗</a>
+ 
+    <nav class="mobile-nav" id="mobileNav" aria-label="Navegação mobile">
+      <a href="#portfolio" data-filter-link="design">Designer</a>
+      <a href="#portfolio" data-filter-link="video">Editor de Vídeos</a>
+      <a href="#processo">Processo</a>
+      <a href="#contato">Contato</a>
+      <a class="mobile-nav-cta" href="https://wa.me/7799125615">Vamos conversar ↗</a>
+    </nav>
+  </header>
+ 
+  <main id="top">
+ 
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div class="hero-liquid" aria-hidden="true">
+        <span class="liquid-blob liquid-blob-blue liquid-blob-1"></span>
+        <span class="liquid-blob liquid-blob-blue liquid-blob-2"></span>
+        <span class="liquid-blob liquid-blob-blue liquid-blob-3"></span>
+        <span class="liquid-blob liquid-blob-black liquid-blob-4"></span>
+        <span class="liquid-blob liquid-blob-black liquid-blob-5"></span>
+        <span class="liquid-blob liquid-blob-blue liquid-blob-6"></span>
+        <span class="hero-liquid-fade"></span>
+      </div>
+ 
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><i></i> Designer · Editor de Vídeos</div>
+          <h1>Ideias que<br><em>ganham forma.</em></h1>
+          <p class="lede">Criação de artes e vídeos que transformam posicionamento em experiências impossíveis de ignorar.</p>
+          <div class="hero-actions">
+            <a class="primary" href="#portfolio">Explorar trabalho ↓</a>
+            <a class="secondary" href="https://wa.me/7799125615" target="_blank">Falar comigo</a>
+          </div>
+        </div>
+ 
+        <div class="hero-art" aria-label="Colagem visual de direção de arte">
+          <span class="hero-hud"><i></i> Live feed</span>
+          <span class="art-label">SELECTED WORK / 2024—26</span>
+          <span class="circle">Design<br>in motion</span>
+        </div>
+      </div>
+    </section>
+ 
+    <div class="shell">
+ 
+      <!-- ===================== SWITCHER ===================== -->
+      <div class="switcher" aria-label="Selecionar especialidade">
+        <span class="switcher-title">Explore por especialidade</span>
+        <div class="tabs">
+          <button class="tab tab-major" data-filter="design">Designer</button>
+          <button class="tab tab-major" data-filter="video">Editor de Vídeos</button>
+          <button class="tab tab-minor" data-filter="all">Ver todos</button>
+        </div>
+      </div>
+ 
+      <!-- ===================== PORTFÓLIO ===================== -->
+      <section id="portfolio">
+        <div class="section-head">
+          <div>
+            <span class="section-tag">// 01 — selected works</span>
+            <h2>Trabalho<br>selecionado<span style="color:var(--deep-blue)">.</span></h2>
+          </div>
+          <p>Uma seleção de projetos onde estratégia, estética e narrativa trabalham no mesmo ritmo.</p>
+        </div>
+ 
+        <!-- Design -->
+        <div class="portfolio-group" id="groupDesign" data-group="design">
+          <h3 class="subsection-title">Design</h3>
+          <div class="design-grid">
+            <article class="project large expandable" data-type="design">
+              <span class="expand-hint">⤢</span>
+              <img loading="lazy" alt="Identidade visual azul para a marca Atlas" src="images/art2.png">
+              <div class="project-info"><small>Criativo · Investimento na Europa</small><h3>Criativo para Apex</h3></div>
+            </article>
+            <div class="stack">
+              <article class="project expandable" data-type="design">
+                <span class="expand-hint">⤢</span>
+                <img loading="lazy" alt="Composição tipográfica editorial" src="/images/art4.png">
+                <div class="project-info"><small>Criativo · Evento com Pablo Marçal</small><h3>Criativo para o Precatório Summit</h3></div>
+              </article>
+            </div>
+          </div>
+ 
+          <!--
+            "Ver mais design": mesma estrutura do bloco acima (1 item grande + 1 coluna
+            "stack" com os itens menores empilhados). Para adicionar um novo item aqui,
+            basta duplicar um <article class="project expandable"> dentro da .stack.
+          -->
+          <div class="design-grid design-extra" id="designExtra">
+            <article class="project large expandable" data-type="design">
+              <span class="expand-hint">⤢</span>
+              <img loading="lazy" alt="Identidade visual azul para a marca Atlas" src="images/art3.png">
+              <div class="project-info"><small>Criativo · Investimento na Europa</small><h3>Jogo do Ronaldinho vs Deco em Portugal</h3></div>
+            </article>
+            <div class="stack">
+              <article class="project expandable" data-type="design">
+                <span class="expand-hint">⤢</span>
+                <img loading="lazy" alt="Composição tipográfica editorial" src="/images/art5.jpg">
+                <div class="project-info"><small>Backdrop · Telão de evento</small><h3>Arte para telão do II Encontro Nacional de Precatórios</h3></div>
+              </article>
+              <article class="project expandable" data-type="design">
+                <span class="expand-hint">⤢</span>
+                <img loading="lazy" alt="Composição tipográfica editorial" src="/images/art6.png">
+                <div class="project-info"><small>Flyer · Evento de carro</small><h3>Flyer para festa de som automotivo</h3></div>
+              </article>
+              <article class="project expandable" data-type="design">
+                <span class="expand-hint">⤢</span>
+                <img loading="lazy" alt="Composição tipográfica editorial" src="/images/art7.png">
+                <div class="project-info"><small>Criativo · Loja de Vapes</small><h3>Criativo para produtos</h3></div>
+              </article>
+            </div>
+          </div>
+ 
+          <div class="load-more">
+            <button id="loadMoreBtn" type="button" aria-expanded="false" aria-controls="designExtra">Ver mais design ↓</button>
+          </div>
+        </div>
+ 
+        <!-- Vídeos — 5 espaços -->
+        <div class="portfolio-group" id="groupVideo" data-group="video">
+          <div class="video-section">
+            <h3 class="subsection-title">Vídeos</h3>
+            <div class="video-grid">
+ 
+              <!--
+                COMO ADICIONAR UM VÍDEO DO YOUTUBE:
+                1. Pegue o ID do vídeo (a parte final do link). Ex: em
+                   https://youtu.be/Z41q6o6YQXw ou https://www.youtube.com/watch?v=Z41q6o6YQXw
+                   o ID é: Z41q6o6YQXw
+                2. Cole esse ID no atributo data-youtube="..." do <article>.
+                3. Troque o src da imagem por:
+                   https://img.youtube.com/vi/SEU-ID/hqdefault.jpg
+                   (isso gera a miniatura automaticamente, com o botão de play por cima)
+                4. Ajuste o texto em .project-info (categoria + título).
+                Ao clicar no card, o vídeo abre ampliado e toca dentro do site.
+              -->
+              <article class="project expandable" data-type="video" data-youtube="wWiUdRw7Pds">
+                <span class="expand-hint">⤢</span>
+                <img class="yt-thumb" loading="lazy" alt="Capa do vídeo Entre frames" src="https://img.youtube.com/vi/wWiUdRw7Pds/hqdefault.jpg">
+                <span class="yt-play" aria-hidden="true"></span>
+                <div class="project-info"><small>Vídeo · Edição</small><h3>Criativo ApexPay</h3></div>
+              </article>
+
+              <article class="project expandable" data-type="video" data-youtube="Z41q6o6YQXw">
+                <span class="expand-hint">⤢</span>
+                <img class="yt-thumb" loading="lazy" alt="Capa do vídeo Entre frames" src="https://img.youtube.com/vi/Z41q6o6YQXw/hqdefault.jpg">
+                <span class="yt-play" aria-hidden="true"></span>
+                <div class="project-info"><small>Vídeo · Edição</small><h3>Vídeo para Landing Page</h3></div>
+              </article>
+ 
+              <article class="project expandable" data-type="video" data-youtube="mVPbUEdahwA">
+                <span class="expand-hint">⤢</span>
+                <img class="yt-thumb" loading="lazy" alt="Capa do vídeo Entre frames" src="https://img.youtube.com/vi/mVPbUEdahwA/hqdefault.jpg">
+                <span class="yt-play" aria-hidden="true"></span>
+                <div class="project-info"><small>Vídeo · Edição</small><h3>Criativo Colégio</h3></div>
+              </article>
+              <article class="project expandable" data-type="video" data-youtube="ZLyB5-7u4_O0">
+                <span class="expand-hint">⤢</span>
+                <img class="yt-thumb" loading="lazy" alt="Capa do vídeo Entre frames" src="https://img.youtube.com/vi/LyB5-7u4_O0/hqdefault.jpg">
+                <span class="yt-play" aria-hidden="true"></span>
+                <div class="project-info"><small>Vídeo · Edição</small><h3>Criativo Apex Seguros</h3></div>
+              </article>
+              <article class="project expandable" data-type="video" data-youtube="gagJ5yRfiwA">
+                <span class="expand-hint">⤢</span>
+                <img class="yt-thumb" loading="lazy" alt="Capa do vídeo Entre frames" src="https://img.youtube.com/vi/gagJ5yRfiwA/hqdefault.jpg">
+                <span class="yt-play" aria-hidden="true"></span>
+                <div class="project-info"><small>Vídeo · Edição</small><h3>Criativo Apex Invest</h3></div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- ===================== NÚMEROS ===================== -->
+      <section class="facts" aria-label="Números do portfólio">
+        <div class="fact"><strong>08</strong><span>Anos criando com intenção</span></div>
+        <div class="fact"><strong>+70</strong><span>Projetos lançados</span></div>
+        <div class="fact"><strong>+60</strong><span>Clientes satisfeitos</span></div>
+      </section>
+ 
+      <!-- ===================== PROCESSO ===================== -->
+      <section id="processo" class="process">
+        <div>
+          <span class="section-tag">// 02 — workflow</span>
+          <h2>Menos ruído.<br><span style="color:var(--deep-blue)">Mais impacto.</span></h2>
+          <p>O processo é colaborativo, estratégico e feito para encontrar a ideia certa — não apenas a mais bonita.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><b>01</b><div><h3>Imersão</h3><p>Entendo o contexto, o público e a ambição por trás do projeto.</p></div></div>
+          <div class="step"><b>02</b><div><h3>Direção</h3><p>Transformo pesquisa em uma linguagem visual clara e memorável.</p></div></div>
+          <div class="step"><b>03</b><div><h3>Execução</h3><p>Construo cada detalhe para que a ideia funcione em qualquer tela.</p></div></div>
+        </div>
+      </section>
+ 
+      <!-- ===================== CONTATO ===================== -->
+      <section id="contato">
+        <div class="contact">
+          <div>
+            <h2>Tem uma ideia<br>em movimento?</h2>
+            <p>Vamos construir algo que faça as pessoas parar, sentir e lembrar.</p>
+          </div>
+          <a class="secondary" href="https://wa.me/7799125615">Entre em contato ↗</a>
+        </div>
+      </section>
+ 
+    </div>
+  </main>
+ 
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="shell">
+    <span>© 2026 José Marcos Designer</span>
+    <span>Brasília, DF · Brasil / disponível globalmente</span>
+  </footer>
+ 
+  <div class="toast" role="status" aria-live="polite">E-mail copiado para a área de transferência.</div>
+ 
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Fechar">✕</button>
+      <div class="lightbox-media" id="lightboxMedia"></div>
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+    </div>
+  </div>
+ 
+  <script>
+    // --- Alterna entre o grupo Design e o grupo Vídeos (Ver todos mostra os dois) ---
+    const tabs = document.querySelectorAll('.tab');
+    const groups = document.querySelectorAll('.portfolio-group');
+ 
+    function showGroup(filter) {
+      groups.forEach(group => {
+        const matches = filter === 'all' || group.dataset.group === filter;
+        group.classList.toggle('active', matches);
+      });
+    }
+ 
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        showGroup(tab.dataset.filter);
+      });
+    });
+ 
+    // estado inicial: mostra os dois grupos até a pessoa escolher um filtro
+    showGroup('all');
+ 
+    // --- Links do menu (Designer / Editor de Vídeos) aplicam o mesmo filtro dos botões ---
+    document.querySelectorAll('[data-filter-link]').forEach(link => {
+      link.addEventListener('click', () => {
+        const filter = link.dataset.filterLink;
+        const matchingTab = document.querySelector(`.tab-major[data-filter="${filter}"]`);
+        if (matchingTab) {
+          tabs.forEach(t => t.classList.remove('active'));
+          matchingTab.classList.add('active');
+          showGroup(filter);
+        }
+      });
+    });
+ 
+    // --- Botão "ver mais design" ---
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const designExtra = document.getElementById('designExtra');
+ 
+    loadMoreBtn?.addEventListener('click', () => {
+      const showing = designExtra.classList.toggle('show');
+      loadMoreBtn.textContent = showing ? 'Ver menos design ↑' : 'Ver mais design ↓';
+      loadMoreBtn.setAttribute('aria-expanded', showing);
+    });
+ 
+    // --- Lightbox: amplia a arte/vídeo/YouTube ao clicar no card ---
+    const lightbox = document.getElementById('lightbox');
+    const lightboxMedia = document.getElementById('lightboxMedia');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+ 
+    function openLightbox(card) {
+      lightboxMedia.innerHTML = '';
+ 
+      const youtubeId = card.dataset.youtube;
+ 
+      if (youtubeId) {
+        // Vídeo do YouTube: mostra o player embutido, já tocando.
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0`;
+        iframe.title = card.querySelector('.project-info h3')?.textContent || 'Vídeo';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.allowFullscreen = true;
+        lightboxMedia.appendChild(iframe);
+      } else {
+        // Imagem ou vídeo local (comportamento original).
+        const media = card.querySelector('img, video');
+        if (!media) return;
+ 
+        const clone = media.cloneNode(true);
+        clone.removeAttribute('loading');
+        if (clone.tagName === 'VIDEO') {
+          clone.muted = false;
+          clone.loop = false;
+          clone.controls = true;
+          clone.autoplay = true;
+        }
+        lightboxMedia.appendChild(clone);
+      }
+ 
+      const title = card.querySelector('.project-info h3')?.textContent || '';
+      const kicker = card.querySelector('.project-info small')?.textContent || '';
+      lightboxCaption.innerHTML = title ? `${title}<small>${kicker}</small>` : '';
+ 
+      lightbox.classList.add('show');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+ 
+    function closeLightbox() {
+      lightbox.classList.remove('show');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxMedia.innerHTML = ''; // remove o iframe/vídeo, parando a reprodução
+      document.body.style.overflow = '';
+    }
+ 
+    document.querySelectorAll('.project.expandable').forEach(card => {
+      card.addEventListener('click', () => openLightbox(card));
+    });
+ 
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+ 
+    // --- Copiar e-mail ao clicar em links mailto ---
+    document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+      link.addEventListener('click', () => {
+        navigator.clipboard?.writeText('hello@alexmartins.studio');
+        const toast = document.querySelector('.toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2200);
+      });
+    });
+ 
+    // --- Menu mobile (hamburger) ---
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+ 
+    function closeMobileNav() {
+      mobileNav.classList.remove('show');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Abrir menu');
+      document.body.style.overflow = '';
+    }
+ 
+    function openMobileNav() {
+      mobileNav.classList.add('show');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      menuToggle.setAttribute('aria-label', 'Fechar menu');
+      document.body.style.overflow = 'hidden';
+    }
+ 
+    menuToggle?.addEventListener('click', () => {
+      mobileNav.classList.contains('show') ? closeMobileNav() : openMobileNav();
+    });
+ 
+    mobileNav?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeMobileNav);
+    });
+ 
+    // fecha o menu se a tela for redimensionada (ex: girar o celular) para telas maiores
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 900 && mobileNav.classList.contains('show')) closeMobileNav();
+    });
+  </script>
+ 
+</body>
+</html>
