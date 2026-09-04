@@ -12,7 +12,7 @@
     ============================================ */
     :root {
       --ink: #05070a;          /* fundo geral do site (quase preto) */
-      --black: #000000;        /* preto puro (usado no efeito líquido) */
+      --black: #000000;        /* preto puro (usado no fundo da hero) */
       --deep-blue: #0845b4;    /* azul escuro (cor de destaque principal) */
       --navy: #0c1624;         /* fundo dos cards */
       --white: #f7f9fc;
@@ -178,7 +178,7 @@
  
  
     /* ============================================
-       3. HERO + EFEITO LÍQUIDO (apenas preto + azul escuro)
+       3. HERO + FUNDO (agora estático — sem blur, sem animação)
     ============================================ */
     .hero {
       position: relative;
@@ -186,93 +186,18 @@
       isolation: isolate;
     }
  
+    /* Fundo estático: apenas gradientes leves (preto + azul escuro), sem blur nem
+       animação. Substitui o antigo efeito de "blobs líquidos" que pesava no site. */
     .hero-liquid {
       position: absolute;
       inset: 0;
-      background: var(--black);
-      overflow: hidden;
       z-index: 0;
-    }
- 
-    /* leve grão para dar textura ao movimento */
-    .hero-liquid::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-      opacity: .5;
-      z-index: 2;
-      pointer-events: none;
-    }
- 
-    .liquid-blob {
-      position: absolute;
-      filter: blur(55px);
-      will-change: transform, border-radius;
-    }
- 
-    /* manchas azuis (mesma cor #0845b4, variando opacidade/tamanho para dar profundidade) */
-    .liquid-blob-blue {
-      mix-blend-mode: screen;
-      background: radial-gradient(circle at 40% 40%, var(--deep-blue) 0%, #052f7d 45%, transparent 76%);
-    }
- 
-    /* manchas pretas (para o contraste "tinta" no fundo) */
-    .liquid-blob-black {
-      mix-blend-mode: multiply;
-      background: radial-gradient(circle at 50% 50%, #000 0%, #010204 45%, transparent 74%);
-    }
- 
-    .liquid-blob-1 {
-      width: min(680px, 90vw); height: min(680px, 74vh);
-      top: -20%; left: -14%;
-      opacity: .95;
-      border-radius: 42% 58% 68% 32% / 48% 42% 58% 52%;
-      animation: liquid-1 5.5s ease-in-out infinite;
-    }
- 
-    .liquid-blob-2 {
-      width: min(560px, 78vw); height: min(560px, 66vh);
-      top: 8%; right: -16%;
-      opacity: .85;
-      border-radius: 58% 42% 35% 65% / 52% 58% 42% 48%;
-      animation: liquid-2 6.5s ease-in-out infinite;
-    }
- 
-    .liquid-blob-3 {
-      width: min(500px, 72vw); height: min(500px, 62vh);
-      bottom: -22%; left: 16%;
-      opacity: .9;
-      border-radius: 65% 35% 52% 48% / 38% 62% 38% 62%;
-      animation: liquid-3 5s ease-in-out infinite;
-    }
- 
-    .liquid-blob-4 {
-      width: min(460px, 66vw); height: min(460px, 58vh);
-      bottom: 2%; right: 18%;
-      opacity: 1;
-      filter: blur(48px);
-      border-radius: 48% 52% 64% 36% / 44% 56% 44% 56%;
-      animation: liquid-4 8s ease-in-out infinite;
-    }
- 
-    .liquid-blob-5 {
-      width: min(560px, 86vw); height: min(560px, 76vh);
-      top: 20%; left: 26%;
-      opacity: 1;
-      filter: blur(48px);
-      border-radius: 52% 48% 60% 40% / 45% 55% 45% 55%;
-      animation: liquid-5 7.5s ease-in-out infinite;
-    }
- 
-    .liquid-blob-6 {
-      width: min(420px, 62vw); height: min(420px, 56vh);
-      bottom: -10%; right: 0;
-      opacity: .9;
-      filter: blur(50px);
-      border-radius: 60% 40% 45% 55% / 50% 50% 55% 45%;
-      animation: liquid-6 8s ease-in-out infinite reverse;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(8, 69, 180, .55), transparent 42%),
+        radial-gradient(circle at 82% 12%, rgba(8, 69, 180, .35), transparent 46%),
+        radial-gradient(circle at 30% 88%, rgba(8, 69, 180, .30), transparent 50%),
+        radial-gradient(circle at 88% 78%, rgba(8, 69, 180, .22), transparent 46%),
+        var(--black);
     }
  
     .hero-liquid-fade {
@@ -282,36 +207,6 @@
       background: linear-gradient(180deg, transparent, var(--ink));
       z-index: 1;
       pointer-events: none;
-    }
- 
-    @keyframes liquid-1 {
-      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 42% 58% 68% 32% / 48% 42% 58% 52%; }
-      25%      { transform: translate(20vw,14vh) rotate(90deg) scale(1.22); border-radius: 58% 42% 38% 62% / 55% 45% 55% 45%; }
-      50%      { transform: translate(10vw,-8vh) rotate(180deg) scale(.88); border-radius: 35% 65% 55% 45% / 62% 38% 62% 38%; }
-      75%      { transform: translate(-8vw,10vh) rotate(270deg) scale(1.16); border-radius: 50% 50% 40% 60% / 48% 52% 48% 52%; }
-    }
-    @keyframes liquid-2 {
-      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 58% 42% 35% 65% / 52% 58% 42% 48%; }
-      33%      { transform: translate(-18vw,20vh) rotate(-120deg) scale(1.28); border-radius: 40% 60% 65% 35% / 58% 42% 58% 42%; }
-      66%      { transform: translate(-9vw,-14vh) rotate(-240deg) scale(.86); border-radius: 62% 38% 48% 52% / 45% 55% 45% 55%; }
-    }
-    @keyframes liquid-3 {
-      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 65% 35% 52% 48% / 38% 62% 38% 62%; }
-      30%      { transform: translate(24vw,-18vh) rotate(100deg) scale(1.2); border-radius: 45% 55% 68% 32% / 52% 48% 52% 48%; }
-      60%      { transform: translate(-14vw,-9vh) rotate(200deg) scale(1.3); border-radius: 55% 45% 35% 65% / 48% 52% 48% 52%; }
-    }
-    @keyframes liquid-4 {
-      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 48% 52% 64% 36% / 44% 56% 44% 56%; }
-      40%      { transform: translate(-20vw,11vh) rotate(-80deg) scale(1.24); border-radius: 62% 38% 42% 58% / 55% 45% 55% 45%; }
-      80%      { transform: translate(14vw,18vh) rotate(-160deg) scale(.82); border-radius: 38% 62% 58% 42% / 48% 52% 48% 52%; }
-    }
-    @keyframes liquid-5 {
-      0%, 100% { transform: translate(0,0) scale(1); border-radius: 52% 48% 60% 40% / 45% 55% 45% 55%; }
-      50%      { transform: translate(-14vw,14vh) scale(1.32); border-radius: 40% 60% 55% 45% / 58% 42% 58% 42%; }
-    }
-    @keyframes liquid-6 {
-      0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 60% 40% 45% 55% / 50% 50% 55% 45%; }
-      50%      { transform: translate(18vw,-18vh) rotate(140deg) scale(1.26); border-radius: 42% 58% 62% 38% / 55% 45% 50% 50%; }
     }
  
     /* conteúdo da hero — mais colado no header */
@@ -445,7 +340,7 @@
       inset: 0;
       background:
         linear-gradient(145deg, rgba(8, 69, 180, .22), transparent 45%),
-        url('images/hero.JPEG') center/cover;
+        url('images/hero.jpg') center/cover;
       mix-blend-mode: screen;
       opacity: .78;
     }
@@ -1171,11 +1066,6 @@
     /* ============================================
        14. ACESSIBILIDADE & RESPONSIVO
     ============================================ */
-    @media (prefers-reduced-motion: reduce) {
-      .liquid-blob { animation-duration: 38s !important; }
-      .hero-hud i { animation-duration: 6s !important; }
-    }
- 
     /* --- TABLET (≈1080px e abaixo): ainda 2 colunas, mas mais compactas --- */
     @media (max-width: 1080px) {
       .shell { padding: 0 24px; }
@@ -1337,12 +1227,6 @@
     <!-- ===================== HERO ===================== -->
     <section class="hero">
       <div class="hero-liquid" aria-hidden="true">
-        <span class="liquid-blob liquid-blob-blue liquid-blob-1"></span>
-        <span class="liquid-blob liquid-blob-blue liquid-blob-2"></span>
-        <span class="liquid-blob liquid-blob-blue liquid-blob-3"></span>
-        <span class="liquid-blob liquid-blob-black liquid-blob-4"></span>
-        <span class="liquid-blob liquid-blob-black liquid-blob-5"></span>
-        <span class="liquid-blob liquid-blob-blue liquid-blob-6"></span>
         <span class="hero-liquid-fade"></span>
       </div>
  
@@ -1393,13 +1277,13 @@
           <div class="design-grid">
             <article class="project large expandable" data-type="design">
               <span class="expand-hint">⤢</span>
-              <img loading="lazy" alt="Identidade visual azul para a marca Atlas" src="/images/art2.png">
+              <img loading="lazy" alt="Identidade visual azul para a marca Atlas" src="images/art2.png">
               <div class="project-info"><small>Criativo · Investimento na Europa</small><h3>Criativo para Apex</h3></div>
             </article>
             <div class="stack">
               <article class="project expandable" data-type="design">
                 <span class="expand-hint">⤢</span>
-                <img loading="lazy" alt="Composição tipográfica editorial" src="/images/art4.png">
+                <img loading="lazy" alt="Composição tipográfica editorial" src="images/art4.png">
                 <div class="project-info"><small>Criativo · Evento com Pablo Marçal</small><h3>Criativo para o Precatório Summit</h3></div>
               </article>
             </div>
@@ -1413,23 +1297,23 @@
           <div class="design-grid design-extra" id="designExtra">
             <article class="project large expandable" data-type="design">
               <span class="expand-hint">⤢</span>
-              <img loading="lazy" alt="Identidade visual azul para a marca Atlas" src="/images/art3.png">
+              <img loading="lazy" alt="Identidade visual azul para a marca Atlas" src="images/art3.png">
               <div class="project-info"><small>Criativo · Investimento na Europa</small><h3>Jogo do Ronaldinho vs Deco em Portugal</h3></div>
             </article>
             <div class="stack">
               <article class="project expandable" data-type="design">
                 <span class="expand-hint">⤢</span>
-                <img loading="lazy" alt="Composição tipográfica editorial" src="/images/art5.jpg">
+                <img loading="lazy" alt="Composição tipográfica editorial" src="images/art5.jpg">
                 <div class="project-info"><small>Backdrop · Telão de evento</small><h3>Arte para telão do II Encontro Nacional de Precatórios</h3></div>
               </article>
               <article class="project expandable" data-type="design">
                 <span class="expand-hint">⤢</span>
-                <img loading="lazy" alt="Composição tipográfica editorial" src="/images/art6.png">
+                <img loading="lazy" alt="Composição tipográfica editorial" src="images/art6.png">
                 <div class="project-info"><small>Flyer · Evento de carro</small><h3>Flyer para festa de som automotivo</h3></div>
               </article>
               <article class="project expandable" data-type="design">
                 <span class="expand-hint">⤢</span>
-                <img loading="lazy" alt="Composição tipográfica editorial" src="/images/art7.png">
+                <img loading="lazy" alt="Composição tipográfica editorial" src="images/art7.png">
                 <div class="project-info"><small>Criativo · Loja de Vapes</small><h3>Criativo para produtos</h3></div>
               </article>
             </div>
@@ -1455,6 +1339,8 @@
                 3. Troque o src da imagem por:
                    https://img.youtube.com/vi/SEU-ID/hqdefault.jpg
                    (isso gera a miniatura automaticamente, com o botão de play por cima)
+                   IMPORTANTE: use o MESMO ID nos dois lugares (data-youtube e no src da
+                   miniatura) — se ficarem diferentes, a miniatura não aparece.
                 4. Ajuste o texto em .project-info (categoria + título).
                 Ao clicar no card, o vídeo abre ampliado e toca dentro do site.
               -->
@@ -1480,7 +1366,7 @@
               </article>
               <article class="project expandable" data-type="video" data-youtube="ZLyB5-7u4_O0">
                 <span class="expand-hint">⤢</span>
-                <img class="yt-thumb" loading="lazy" alt="Capa do vídeo Entre frames" src="https://img.youtube.com/vi/LyB5-7u4_O0/hqdefault.jpg">
+                <img class="yt-thumb" loading="lazy" alt="Capa do vídeo Entre frames" src="https://img.youtube.com/vi/ZLyB5-7u4_O0/hqdefault.jpg">
                 <span class="yt-play" aria-hidden="true"></span>
                 <div class="project-info"><small>Vídeo · Edição</small><h3>Criativo Apex Seguros</h3></div>
               </article>
